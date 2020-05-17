@@ -1,0 +1,7 @@
+venv/
+.idea/
+__pycache__/
+*.py[cod]
+text.txt
+shops_items/items.json
+db.sqlite3
