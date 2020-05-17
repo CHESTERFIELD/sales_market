@@ -14,7 +14,8 @@ import sys
 
 # DJANGO INTEGRATION
 
-sys.path.append(os.path.dirname(os.path.abspath('')))
+sys.path.append(os.path.dirname(os.path.abspath('/home/chesterfield/dev/sales_marker/mysite/mysite/')))
+
 # Do not forget the change iCrawler part based on your project name
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
 
@@ -80,7 +81,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'shops_items.pipelines.ShopsItemsPipeline': 300,
+   'shops_items.pipelines.ProductPipeline': 300,
+   'shops_items.pipelines.CategoryPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

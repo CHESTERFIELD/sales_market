@@ -2,17 +2,20 @@ import scrapy
 
 from shops_items.items import CategoryItem, ProductItem
 
+from rozetka.models import Product, Category
+
 
 class ItemsSpider(scrapy.Spider):
 
     name = 'rozetka_hrefs'
     start_urls = [
-        'https://rozetka.com.ua/promo/laughday/',
+        'https://rozetka.com.ua/promo/cyclone/',
     ]
     number_of_pages = 0
 
     # parse promo page and save all categories and link to them
     def parse(self, response):
+        self.deleteDatabase()
         global file
         file = open('text.txt', 'w')
         categories = []
@@ -25,7 +28,7 @@ class ItemsSpider(scrapy.Spider):
             iCategory = CategoryItem()
             iCategory['name'] = name
             iCategory['link'] = href_to_new_catalog
-
+            yield iCategory
 
             categories.append(iCategory)
 
@@ -51,9 +54,11 @@ class ItemsSpider(scrapy.Spider):
         # loop for category` links
         for link in links:
             href_to_new_catalog_page = link
-            yield scrapy.Request(href_to_new_catalog_page, self.parse_items_on_new_page)
+            yield scrapy.Request(href_to_new_catalog_page, meta={'category_item': item},
+                                 callback=self.parse_items_on_new_page)
 
     def parse_items_on_new_page(self, response):
+        category = response.meta['category_item']
         promo_date = response.css("div.rz-promopage-promocode span::text").get().strip().split(" ")[-1]
         promo_date = self.formatDate(promo_date)
         for item in response.css("div.g-i-tile-catalog"):
@@ -83,10 +88,11 @@ class ItemsSpider(scrapy.Spider):
             iProduct['cheaper_price'] = cheaper_price
             iProduct['sale'] = 100 - (cheaper_price * 100)/old_price
             iProduct['sale_promo_date'] = sale_promo_date
+            iProduct['category'] = Category.objects.get(link=category['link'])
             yield iProduct
 
     def isNone(self, lists):
-        if lists is None:
+        if type(lists) == type(None):
             price = 0
         else:
             lists = lists.get().strip().split(" ")
@@ -103,3 +109,8 @@ class ItemsSpider(scrapy.Spider):
         print(new_date)
 
         return new_date
+
+    def deleteDatabase(self):
+        Product.objects.all().delete()
+        Category.objects.all().delete()
+        pass
