@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if object_list %}
+        {% for object in object_list %}
+            <div class="col-sm-4">
+                <div class="card w-33" >
+                    <div class="card-body">
+                      <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ object.name }}</h5>
+                        <p class="card-text">{{ object.cheaper_price }}</p>
+                        <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                        <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    <div class="pagination-block">
+        <div class="pagination">
+            <span class="step-links">
+                {% if object_list.has_previous %}
+                    <div class="prev"><a href="?q={{ query }}&page=1">&laquo; Предыдущая</a></div>
+                    <div><a href="?q={{ query }}&page={{ object_list.previous_page_number }}">{{ object_list.previous_page_number }}</a></div>
+                {% endif %}
+
+                 <div><a class="current">{{ object_list.number }}</a></div>
+
+                {% if object_list.has_next %}
+                    <div><a href="?q={{ query }}&page={{ object_list.next_page_number }}">{{ object_list.next_page_number }}</a></div>
+                    <div class="next"><a href="?q={{ query }}&page={{ object_list.next_page_number }}">Следующая &raquo;</a></div>
+                {% endif %}
+            </span>
+        </div>
+        <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+    </div>
+    {% else %}
+    <div class="not-found">
+        <p>Не найдено, просите.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+    </div>
+    {% endif %}
+
+{% endblock %}

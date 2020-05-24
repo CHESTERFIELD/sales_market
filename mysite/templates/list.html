@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for object in page_obj %}
+    <div class="col-sm-4">
+            <div class="card w-33" >
+                <div class="card-body">
+                  <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ object.name }}</h5>
+                    <p class="card-text">{{ object.cheaper_price }}</p>
+                    <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                    <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                  </div>
+                </div>
+            </div>
+         </div>
+{% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+{% endblock %}

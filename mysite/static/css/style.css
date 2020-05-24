@@ -1,7 +1,54 @@
-main {
-    height: 1000px;
-}
 
 .title {
     color: red!important;
+}
+
+.card {
+    display: inline-block;
+}
+
+.card-img-top {
+    size: auto;
+}
+
+.card-img-top {
+    width: 27%; /* Ширина */
+    float: left; /* Выстраиваем элементы по горизонтали */
+    margin: 0 0 0 3.5%; /* Отступ слева */
+    background: #f0f0f0; /* Цвет фона */
+    border-radius: 5px; /* Радиус скругления */
+    padding: 2%; /* Поля */
+   }
+
+.pagination div a {
+    padding-top: 2px; /* сдвигаем сверху, чтобы background выглядел  правильно */
+    width: 25px;
+    height: 25px;
+    display: block;
+}
+.pagination .prev a, .pagination .next a {
+    /* убираем влияние width:25px из правила .pagination div a */
+    width: auto;
+}
+.pagination div a:hover, .pagination div a.current {
+    color: blue;
+    /* задний фон для текущий страницы и для наведения */
+    background: url('http://projects.alexdev.ru/pagination_8_9_13/i/select.png') 0 0 no-repeat;
+}
+
+.pagination .prev a:hover, .pagination .next a:hover {
+    width: auto; /* автоматическая ширина */
+    color: #1982d1;
+    background: none; /*  убираем задний фон при наведении */
+}
+
+.pagination-block {
+    /*position: absolute;*/
+    margin-left: 40%;
+}
+
+.pagination div {
+    text-align: center;
+    float: left;
+    margin: 0 20px 0 0; /* отступ справа */
 }

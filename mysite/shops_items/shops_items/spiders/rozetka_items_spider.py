@@ -43,7 +43,6 @@ class ItemsSpider(scrapy.Spider):
         count_pages = int(response.css("ul.paginator-catalog li span::text").getall()[-1])
         page = 0
         links = []
-        count_pages = 1
         # for each category create list links that will parse to search products
         while count_pages != 0:
             count_pages -= 1

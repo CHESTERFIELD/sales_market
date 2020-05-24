@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Максимальные скидки:</h2>
+    <div class="card-group-list row">
+        {% for object in objects %}
+         <div class="col-sm-4">
+            <div class="card w-33" >
+                <div class="card-body">
+                  <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ object.name }}</h5>
+                    <p class="card-text">{{ object.cheaper_price }}</p>
+                    <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                    <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                  </div>
+                </div>
+            </div>
+         </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

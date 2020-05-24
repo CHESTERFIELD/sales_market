@@ -23,10 +23,10 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategory" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Категории товаров
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Rozetka</a>
-              <a class="dropdown-item" href="#">Foxtrot</a>
-              <a class="dropdown-item" href="#">Cutrus</a>
+            <div class="dropdown-menu drop-categories" aria-labelledby="navbarDropdown">
+              {% for category in categories %}
+                <a class="dropdown-item" href="#">{{ category.name }}</a>
+              {% endfor %}
             </div>
           </li>
 <!--          Магазины-->
@@ -34,40 +34,26 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMarket" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Магазины
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Rozetka</a>
+            <div class="dropdown-menu drop-shops" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'rozetka-category-page' %}">Rozetka</a>
               <a class="dropdown-item" href="#">Foxtrot</a>
               <a class="dropdown-item" href="#">Cutrus</a>
             </div>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Поиск товара..." aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+        <form class="form-inline my-2 my-lg-0" action="{% url 'search_results' %}" method="get">
+            <input name="q" type="text" placeholder="Поиск товара...">
+
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
       </div>
 </nav>
 
 <main>
-<!--    <div class="container">-->
-<!--        <ul class="list-group">-->
-<!--          <li class="list-group-item">Cras justo odio</li>-->
-<!--          <li class="list-group-item">Dapibus ac facilisis in</li>-->
-<!--          <li class="list-group-item">Morbi leo risus</li>-->
-<!--          <li class="list-group-item">Porta ac consectetur ac</li>-->
-<!--          <li class="list-group-item">Vestibulum at eros</li>-->
-<!--        </ul>-->
-<!--    </div>-->
-    {% for object in objects %}
-        <div class="card" style="width: 18rem;">
-          <img src="{{ object.link_to_photo }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{ object.name }}</h5>
-            <p class="card-text">{{ object.cheaper_price }}</p>
-            <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
-          </div>
-        </div>
-    {% endfor %}
+
+    {% block content %}
+    {% endblock %}
+
 </main>
 
 <!-- Footer -->

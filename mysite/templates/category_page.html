@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <ul class="list-group">
+            <h2>Нажмите, чтобы перейти</h2>
+            {% for object in objects %}
+                <a href="#"><li class="list-group-item">{{ object.name }}</li></a>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
