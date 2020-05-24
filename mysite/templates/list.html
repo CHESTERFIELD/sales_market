@@ -2,39 +2,45 @@
 
 {% block content %}
 
+    <h2>Товары по категории "{{ category }}":</h2>
+    <div class="card-group-list row">
+        {% for object in page_obj %}
+            <div class="col-sm-4">
+                    <div class="card w-33" >
+                        <div class="card-body">
+                          <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                          <div class="card-body">
+                            <h5 class="card-title">{{ object.name }}</h5>
+                            <p class="card-text">{{ object.cheaper_price }}</p>
+                            <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                            <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                          </div>
+                        </div>
+                    </div>
+                 </div>
+        {% endfor %}
+    </div>
 
-{% for object in page_obj %}
-    <div class="col-sm-4">
-            <div class="card w-33" >
-                <div class="card-body">
-                  <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ object.name }}</h5>
-                    <p class="card-text">{{ object.cheaper_price }}</p>
-                    <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
-                    <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
-                  </div>
-                </div>
-            </div>
-         </div>
-{% endfor %}
+    <div class="pagination-block">
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <div class="prev"><a href="?page=1">&laquo; Предыдущая</a></div>
+                    <div><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></div>
+                {% endif %}
 
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
+                 <div><a class="current">{{ page_obj.number }}</a></div>
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                {% if page_obj.has_next %}
+                    <div><a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></div>
+                    <div class="next"><a href="?page={{ page_obj.next_page_number }}">Следующая &raquo;</a></div>
+                {% endif %}
             </span>
+        </div>
+        <div class="back-button">
+             <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+        </div>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
     </div>
 
 {% endblock %}

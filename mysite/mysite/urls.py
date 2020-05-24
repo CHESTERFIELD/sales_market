@@ -20,9 +20,9 @@ from django.urls import path, include
 from mysite import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('rozetka/category/', views.get_rozetka_category, name='rozetka-category-page'),
+    path('', views.home, name='home'),
+    path('rozetka/', include('rozetka.urls')),
     path('search/', include('search.urls')),
 ]
 

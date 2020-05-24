@@ -43,6 +43,7 @@ class ItemsSpider(scrapy.Spider):
         count_pages = int(response.css("ul.paginator-catalog li span::text").getall()[-1])
         page = 0
         links = []
+        count_pages = 1
         # for each category create list links that will parse to search products
         while count_pages != 0:
             count_pages -= 1
@@ -97,7 +98,6 @@ class ItemsSpider(scrapy.Spider):
             lists = lists.get().strip().split(" ")
             price = ""
             price = int(price.join(lists))
-            print(price)
 
         return price
 
@@ -105,7 +105,6 @@ class ItemsSpider(scrapy.Spider):
         list_date = date.split('.')[::-1]
         new_date = "-"
         new_date = new_date.join(list_date)
-        print(new_date)
 
         return new_date
 

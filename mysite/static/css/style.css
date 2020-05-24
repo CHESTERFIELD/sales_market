@@ -33,7 +33,7 @@
 .pagination div a:hover, .pagination div a.current {
     color: blue;
     /* задний фон для текущий страницы и для наведения */
-    background: url('http://projects.alexdev.ru/pagination_8_9_13/i/select.png') 0 0 no-repeat;
+    background: url("/static/img/select.png") 0 0 no-repeat;
 }
 
 .pagination .prev a:hover, .pagination .next a:hover {
@@ -42,13 +42,23 @@
     background: none; /*  убираем задний фон при наведении */
 }
 
-.pagination-block {
-    /*position: absolute;*/
-    margin-left: 40%;
-}
-
 .pagination div {
     text-align: center;
     float: left;
     margin: 0 20px 0 0; /* отступ справа */
+}
+
+.pagination-block {
+    width: 500px; /* Ширина элемента в пикселах */
+    padding: 10px; /* Поля вокруг текста */
+    margin: auto; /* Выравниваем по центру */
+    margin-top: 20px;
+   }
+
+.back-button {
+    margin-top: 20px;
+}
+
+.query-span {
+    text-decoration: underline;
 }
