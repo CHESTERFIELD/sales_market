@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView
 
-from rozetka.models import Category
+from rozetka.models import Category, Product
 
 
 def get_rozetka_category(request):
@@ -21,5 +21,22 @@ class CategoryProductList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = self.category.name
+        context['category'] = self.category
         return context
+
+
+class ProductDetail(DetailView):
+
+    model = Product
+    template_name = "product_detail.html"
+
+    def get_object(self, queryset=None):
+        product = self.model.objects.get(slug=self.kwargs['product_slug'])
+        return product
+
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super().get_context_data(**kwargs)
+    #     # Add in a QuerySet of all the books
+    #     context['book_list'] = Book.objects.all()
+    #     return context

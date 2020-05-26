@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="col-sm-4">
+            <div class="card w-33" >
+                <div class="card-body">
+                  <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ object.name }}</h5>
+                    <p class="card-text">{{ object.cheaper_price }}</p>
+                    <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+<!--                    <a href="{% url 'product-page' object.category.slug object.slug %}" class="btn btn-primary">Просмотреть</a>-->
+                    <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
