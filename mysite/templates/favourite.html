@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h2>Максимальные скидки:</h2>
+    <h2>Избранное:</h2>
     <div class="card-group-list row">
         {% for object in objects %}
          <div class="col-sm-4">
@@ -14,19 +14,7 @@
                     <p class="card-text">{{ object.cheaper_price }}</p>
                     <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
                     <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
-
-                    {% if user.is_authenticated %}
-                      {% if object in favourites %}
-                        <p>Добавлено</p>
-                      {% else %}
-
-                         <form action="{% url 'product_bookmark' pk=object.pk %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" name="upvote" value="Добавить в избранное" />
-                        </form>
-                      {% endif %}
-                    {% endif %}
-
+                  <button type="submit" action="{% url 'product_bookmark' pk=object.pk %}">Добавить в избранное</button>
                   </div>
                 </div>
             </div>

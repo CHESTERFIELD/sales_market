@@ -19,6 +19,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+
 <!--          Категории-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategory" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,6 +31,8 @@
               {% endfor %}
             </div>
           </li>
+<!--          Категории-->
+
 <!--          Магазины-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMarket" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,11 +45,48 @@
             </div>
           </li>
         </ul>
+<!--          Магазины-->
+
+<!--          ПОИСК  -->
         <form class="form-inline my-2 my-lg-0" action="{% url 'search_results' %}" method="get">
             <input name="q" type="text" placeholder="Поиск товара...">
 
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
+<!--          ПОИСК  -->
+
+<!--          ИЗБРАННОЕ -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFavoirites" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Избранное {{ user.favourites.count }}
+            </a>
+            <div class="dropdown-menu drop-shops" aria-labelledby="navbarDropdown">
+           {% if user.is_authenticated %}
+              {% for object in favourites %}
+                <div class="col-sm-4">
+                    <div class="card w-33" >
+                        <div class="card-body">
+                          <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
+                          <div class="card-body">
+                            <h5 class="card-title">{{ object.name }}</h5>
+                            <p class="card-text">{{ object.cheaper_price }}</p>
+                            <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                            <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                          <form action="{% url 'product_bookmark' pk=object.pk %}" method="post">
+                              {% csrf_token %}
+                            <input type="submit" name="upvote" value="Убрать из избранного" />
+                         </form>
+                          </div>
+                        </div>
+                    </div>
+                 </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+          </li>
+<!--          ИЗБРАННОЕ -->
+
+<!--          АВТОРИЗАЦИЯ  -->
           <ul class="sidebar-nav">
            {% if user.is_authenticated %}
            <li>User: {{ user.get_username }}</li>
@@ -57,6 +97,7 @@
             <li><a href="{% url 'register'%}?next={{request.path}}">Register</a></li>
            {% endif %}
          </ul>
+<!--          АВТОРИЗАЦИЯ  -->
       </div>
 </nav>
 

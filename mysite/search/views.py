@@ -12,19 +12,21 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         page = self.request.GET.get('page')
+        if query:
+            object_list = Product.objects.filter(name__icontains=query)
+            paginator = Paginator(object_list, 9)
 
-        object_list = Product.objects.filter(name__icontains=query)
-        paginator = Paginator(object_list, 9)
-
-        try:
-            # Если существует, то выбираем эту страницу
-            object_list = paginator.get_page(page)
-        except PageNotAnInteger:
-            # Если None, то выбираем первую страницу
-            object_list = paginator.get_page(1)
-        except EmptyPage:
-            # Если вышли за последнюю страницу, то возвращаем последнюю
-            object_list = paginator.get_page(paginator.num_pages)
+            try:
+                # Если существует, то выбираем эту страницу
+                object_list = paginator.get_page(page)
+            except PageNotAnInteger:
+                # Если None, то выбираем первую страницу
+                object_list = paginator.get_page(1)
+            except EmptyPage:
+                # Если вышли за последнюю страницу, то возвращаем последнюю
+                object_list = paginator.get_page(paginator.num_pages)
+        else:
+            object_list = Product.objects.all()
 
         return object_list
 
