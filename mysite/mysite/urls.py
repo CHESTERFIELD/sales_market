@@ -24,6 +24,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('rozetka/', include('rozetka.urls')),
     path('search/', include('search.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path("register/", views.register, name="register"),
 ]
 
 

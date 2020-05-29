@@ -2,6 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 
+from rozetka.filters import ProductFilter
 from rozetka.models import Category, Product
 
 
@@ -22,6 +23,8 @@ class CategoryProductList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
+        context['filter'] = ProductFilter(self.request.GET, queryset=self.get_queryset())
+        print(context['filter'])
         return context
 
 
