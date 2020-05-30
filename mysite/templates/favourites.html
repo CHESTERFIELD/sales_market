@@ -1,0 +1,14 @@
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFavoirites" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Избранное {{ favourites.count }}
+    </a>
+    <div class="dropdown-menu drop-shops" aria-labelledby="navbarDropdown">
+        {% if not favourites %}
+            <p>Добавте что-нибудь</p>
+        {% else %}
+          {% for object in favourites %}
+            <a class="dropdown-item" href="{% url 'product-page' object.category.slug object.slug %}">{{ object.name }}</a>
+          {% endfor %}
+        {% endif %}
+    </div>
+</li>

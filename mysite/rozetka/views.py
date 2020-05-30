@@ -22,9 +22,14 @@ class CategoryProductList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        category_queryset = Category.objects.all()
+        favourites = Product.objects.filter(id__in=self.request.user.bookmarkproduct_set.values_list('obj', flat=True))
+
         context['category'] = self.category
         context['filter'] = ProductFilter(self.request.GET, queryset=self.get_queryset())
-        print(context['filter'])
+        context['categories'] = category_queryset
+        context['favourites'] = favourites
         return context
 
 
@@ -35,11 +40,18 @@ class ProductDetail(DetailView):
 
     def get_object(self, queryset=None):
         product = self.model.objects.get(slug=self.kwargs['product_slug'])
+        print(product)
         return product
 
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get a context
-    #     context = super().get_context_data(**kwargs)
-    #     # Add in a QuerySet of all the books
-    #     context['book_list'] = Book.objects.all()
-    #     return context
+    def get_context_data(self, **kwargs):
+        category_queryset = Category.objects.all()
+        if self.request.user.is_authenticated:
+            favourites = Product.objects.filter(id__in=self.request.user.bookmarkproduct_set.values_list('obj', flat=True))
+        else:
+            favourites = []
+        context = {
+            'object': self.object,
+            "categories": category_queryset,
+            'favourites': favourites,
+        }
+        return context

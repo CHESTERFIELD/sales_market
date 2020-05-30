@@ -2,21 +2,42 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="col-sm-4">
-            <div class="card w-33" >
-                <div class="card-body">
-                  <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ object.name }}</h5>
-                    <p class="card-text">{{ object.cheaper_price }}</p>
-                    <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
-<!--                    <a href="{% url 'product-page' object.category.slug object.slug %}" class="btn btn-primary">Просмотреть</a>-->
-                    <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
-                  </div>
-                </div>
-            </div>
+        <div class="card text-center detail-card">
+          <div class="card-header">
+              Название товара - "{{ object.name }}"
+          </div>
+            <img src="{{ object.link_to_photo }}" class="card-img-top detail-img" alt="{{ object.name }}">
+          <div class="card-body">
+            <p class="card-title">Старая цена <span class="old-price">{{ object.old_price }}</span></p>
+            <p class="card-title">Новая цена {{ object.cheaper_price }}</p>
+            <p class="card-title">Скидка - {{ object.sale|floatformat:"0" }}</p>
+            <p class="card-title">Действует до - {{ object.sale_promo_date }}</p>
+
+              {% if object.about %}
+                <p class="card-title">Описание:</p>
+                <p class="card-text">{{ object.about|stringformat:"s" }}</p>
+              {% else %}
+                <p class="card-title">Описание: Не найдено.</p>
+              {% endif %}
+            <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+
+            {% if user.is_authenticated %}
+              {% if object in favourites %}
+                <form action="{% url 'product_bookmark' pk=object.pk %}"  method="post">
+                    {% csrf_token %}
+                     <button type="submit" name="upvote"><i class="fas fa-heart"></i></button></i>
+                </form>
+              {% else %}
+
+                 <form action="{% url 'product_bookmark' pk=object.pk %}" method="post">
+                    {% csrf_token %}
+                     <button type="submit" name="upvote"><i class="far fa-heart"></i></button></i>
+                </form>
+              {% endif %}
+            {% endif %}
+
+          </div>
         </div>
-    </div>
+
 
 {% endblock %}

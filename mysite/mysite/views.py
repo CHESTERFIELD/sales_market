@@ -1,6 +1,8 @@
 from django.contrib import auth
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.views import View
 
 from rozetka.models import Product, Category
@@ -9,30 +11,39 @@ from .forms import RegisterForm
 
 
 # Create your views here.
-def register(response):
-    if response.method == "POST":
-        form = RegisterForm(response.POST)
-
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect("/")
-
+            username = request.POST.get('username')
+            password = request.POST.get('password1')
+            user = authenticate(
+                request,
+                username=username,
+                password=password
+            )
+            login(request, user)
+            return redirect(reverse('home'))
     else:
-
         form = RegisterForm()
-        return render(response, "registration/register.html", {"form": form})
+    args = {'form': form}
+    return render(request, 'registration/register.html', args)
+
 
 
 def home(request):
     product_queryset = Product.objects.order_by("-sale")[:20]
     category_queryset = Category.objects.all()
-    favourites = Product.objects.filter(id__in=request.user.bookmarkproduct_set.values_list('obj', flat=True))
+    if request.user.is_authenticated:
+        favourites = Product.objects.filter(id__in=request.user.bookmarkproduct_set.values_list('obj', flat=True))
+    else:
+        favourites = []
     context = {
         "objects": product_queryset,
         "categories": category_queryset,
         'favourites': favourites,
     }
-    print(context)
     return render(request, 'main_page.html', context=context)
 
 
@@ -49,5 +60,6 @@ class BookmarkView(View):
         # то считаем, что запрос был на удаление закладки
         if not created:
             bookmark.delete()
+            return redirect(home)
 
-        return redirect(home)
+        return redirect('product-page', category_slug=bookmark.obj.category.slug, product_slug=bookmark.obj.slug)

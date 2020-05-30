@@ -27,7 +27,7 @@
             </a>
             <div class="dropdown-menu drop-categories" aria-labelledby="navbarDropdown">
               {% for category in categories %}
-                <a class="dropdown-item" href="#">{{ category.name }}</a>
+                <a class="dropdown-item" href="{% url 'category-page' category.slug %}">{{ category.name }}</a>
               {% endfor %}
             </div>
           </li>
@@ -46,63 +46,40 @@
           </li>
         </ul>
 <!--          Магазины-->
-
 <!--          ПОИСК  -->
-        <form class="form-inline my-2 my-lg-0" action="{% url 'search_results' %}" method="get">
-            <input name="q" type="text" placeholder="Поиск товара...">
+        <form class="form-inline my-2 my-lg-0 search-form" action="{% url 'search_results' %}" method="get">
+            <input class="search" name="q" type="text" placeholder="Поиск товаров по имени...">
 
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
 <!--          ПОИСК  -->
+<!--          АВТОРИЗАЦИЯ  -->
+           {% if user.is_authenticated %}
 
+        <ul class="navbar-nav mr-right right-nav">
+            <!--          ИЗБРАННОЕ -->
+            {% include "favourites.html" %}
 <!--          ИЗБРАННОЕ -->
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFavoirites" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Избранное {{ user.favourites.count }}
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             {{ user.get_username|upper }}
             </a>
             <div class="dropdown-menu drop-shops" aria-labelledby="navbarDropdown">
-           {% if user.is_authenticated %}
-              {% for object in favourites %}
-                <div class="col-sm-4">
-                    <div class="card w-33" >
-                        <div class="card-body">
-                          <img src="{{ object.link_to_photo }}" class="card-img-top" alt="{{ object.name }}">
-                          <div class="card-body">
-                            <h5 class="card-title">{{ object.name }}</h5>
-                            <p class="card-text">{{ object.cheaper_price }}</p>
-                            <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
-                            <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
-                          <form action="{% url 'product_bookmark' pk=object.pk %}" method="post">
-                              {% csrf_token %}
-                            <input type="submit" name="upvote" value="Убрать из избранного" />
-                         </form>
-                          </div>
-                        </div>
-                    </div>
-                 </div>
-                {% endfor %}
-            {% endif %}
+              <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Выйти</a>
             </div>
           </li>
-<!--          ИЗБРАННОЕ -->
-
-<!--          АВТОРИЗАЦИЯ  -->
-          <ul class="sidebar-nav">
-           {% if user.is_authenticated %}
-           <li>User: {{ user.get_username }}</li>
-
-            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
            {% else %}
-            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-            <li><a href="{% url 'register'%}?next={{request.path}}">Register</a></li>
+           <a class="btn btn-outline-primary login" href="{% url 'login'%}?next={{request.path}}">Войти</a>
+           <a class="btn btn-outline-primary" href="{% url 'register'%}?next={{request.path}}">Зарегистрироваться</a>
            {% endif %}
-         </ul>
 <!--          АВТОРИЗАЦИЯ  -->
+        </ul>
       </div>
 </nav>
 
+
 <main>
-    <div class="container">
+    <div class="container content">
         {% block content %}
         {% endblock %}
     </div>
@@ -159,7 +136,7 @@
 </footer>
 <!-- Footer -->
 
-
+    <script src="https://kit.fontawesome.com/68851fa36f.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

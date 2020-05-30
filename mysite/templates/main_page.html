@@ -13,16 +13,21 @@
                     <h5 class="card-title">{{ object.name }}</h5>
                     <p class="card-text">{{ object.cheaper_price }}</p>
                     <p class="card-text">Скидка - {{ object.sale|floatformat:"0" }}</p>
+                    <p class="card-title">Действует до - {{ object.sale_promo_date }}</p>
                     <a href="{{ object.link }}" class="btn btn-primary">Купить</a>
+                    <a href="{% url 'product-page' object.category.slug object.slug %}" class="btn btn-primary">Просмотреть</a>
 
                     {% if user.is_authenticated %}
                       {% if object in favourites %}
-                        <p>Добавлено</p>
+                        <form action="{% url 'product_bookmark' pk=object.pk %}"  method="post">
+                            {% csrf_token %}
+                             <button type="submit" name="upvote"><i class="fas fa-heart"></i></button></i>
+                        </form>
                       {% else %}
 
                          <form action="{% url 'product_bookmark' pk=object.pk %}" method="post">
                             {% csrf_token %}
-                            <input type="submit" name="upvote" value="Добавить в избранное" />
+                             <button type="submit" name="upvote"><i class="far fa-heart"></i></button></i>
                         </form>
                       {% endif %}
                     {% endif %}

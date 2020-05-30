@@ -31,6 +31,7 @@ class Product(models.Model):
     sale_promo_date = models.DateField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE,
                                  related_name='category_product', null=True, blank=True)
+    about = models.TextField(default="", null=True, blank=True)
 
     class Meta:
         verbose_name = "Товар"

@@ -43,7 +43,7 @@ class ItemsSpider(scrapy.Spider):
         count_pages = int(response.css("ul.paginator-catalog li span::text").getall()[-1])
         page = 0
         links = []
-        count_pages = 1
+        # count_pages = 1
         # for each category create list links that will parse to search products
         while count_pages != 0:
             count_pages -= 1
@@ -61,11 +61,13 @@ class ItemsSpider(scrapy.Spider):
         category = response.meta['category_item']
         promo_date = response.css("div.rz-promopage-promocode span::text").get().strip().split(" ")[-1]
         promo_date = self.formatDate(promo_date)
+        items = []
         for item in response.css("div.g-i-tile-catalog"):
 
-            name = item.css('a.novisited::text').get().strip().split("(")[0]
+            name = item.css('a.novisited::text').get().strip().split("(")[0].strip()
 
-            href_to_file = item.css('a.novisited::attr(href)').get()
+            link = item.css('a.novisited::attr(href)').get()
+            items.append(link)
 
             link_to_photo = item.css('div.g-i-tile-i-image img::attr(data-rz-lazy-load-src)').get()
 
@@ -77,19 +79,30 @@ class ItemsSpider(scrapy.Spider):
 
             sale_promo_date = promo_date
 
-            if name != "" and href_to_file != "#":
-                file.write(name + " " + href_to_file + "\n")
+            if name != "" and link != "#":
+                file.write(name + " " + link + "\n")
 
             iProduct = ProductItem()
             iProduct['name'] = name
-            iProduct['link'] = href_to_file
+            iProduct['link'] = link
             iProduct['link_to_photo'] = link_to_photo
             iProduct['old_price'] = old_price
             iProduct['cheaper_price'] = cheaper_price
             iProduct['sale'] = 100 - (cheaper_price * 100)/old_price
             iProduct['sale_promo_date'] = sale_promo_date
             iProduct['category'] = Category.objects.get(link=category['link'])
-            yield iProduct
+
+            yield scrapy.Request(link, meta={'product_item': iProduct},
+                                 callback=self.parse_about_of_item)
+
+    def parse_about_of_item(self, response):
+        product = response.meta['product_item']
+        about = response.css("div.product-about__description-content p::text").getall()
+        print(about)
+        if about:
+            product['about'] = about
+
+        yield product
 
     def isNone(self, lists):
         if type(lists) == type(None):

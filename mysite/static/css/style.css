@@ -1,6 +1,7 @@
 
-.title {
-    color: red!important;
+.navbar-brand {
+    font-size: 1.50rem;
+    margin-right: 30px;
 }
 
 .card {
@@ -61,4 +62,46 @@
 
 .query-span {
     text-decoration: underline;
+}
+
+input.search {
+    width: 300px!important;
+    margin-right: 6px;
+}
+
+.search-form {
+    margin-right: 6px;
+}
+.login {
+    margin-right: 6px;
+}
+
+.login-preview {
+    font-size: medium;
+}
+
+main {
+    min-height: auto;
+}
+
+footer {
+    height: 100px;
+}
+
+div.detail-card {
+    width: 100%;
+    height: 80%;
+}
+
+.detail-img {
+    width: 15%; /* Ширина */
+    float: left; /* Выстраиваем элементы по горизонтали */
+    margin: 0 0 0 3.5%; /* Отступ слева */
+    background: #f0f0f0; /* Цвет фона */
+    border-radius: 5px; /* Радиус скругления */
+    padding: 2%; /* Поля */
+   }
+
+.old-price {
+    text-decoration: line-through;
 }
